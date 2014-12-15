@@ -69,9 +69,9 @@ class Boids
     //                              Public Methods
     // =======================================================================
     void addAgent(Agent a);
-    void v1(Agent a);
-    void v2(Agent a);
-    void v3(Agent a);
+    double * v1(int p);
+    double * v2(int p);
+    double * v3(Agent a);
     void v(Agent a);
     bool proximity(Agent a1, Agent a2);
     int neighbours(int p);

@@ -81,17 +81,47 @@ int Boids::neighbours(int p)
   return K;
 }
 
-void Boids::v1(Agent a)
+double * Boids::v1(int p)
 {
-  
+  double * v1 = new double[2];
+  v1[0]=0;
+  v1[1]=0;
+  int i;
+  for(i=0;i<nb_Agents;i++)
+    {
+      if(proximity(data[p],data[i])) // Si l'élément est dans le rayon de perception de data[p]
+	{
+	  v1[0] += (data[i].vx-data[p].vx); // On ajoute la différence à v1
+	  v1[1] += (data[i].vy-data[p].vy);
+	}
+    }
+  v1[0] /= neighbours(p); // On divise par le nb d'agents dans le rayon de perception
+  v1[1] /= neighbours(p);
+
+  return v1;
 }
 
-void Boids::v2(Agent a)
+double * Boids::v2(int p)
 {
-  
+  double * v2 = new double[2];
+  v2[0]=0;
+  v2[1]=0;
+  int i;
+  for(i=0;i<nb_Agents;i++)
+    {
+      if(proximity(data[p],data[i])) // Si l'élément est dans le rayon de perception de data[p]
+	{
+	  v2[0] += (data[i].x-data[p].x); // On ajoute la différence à v2
+	  v2[1] += (data[i].y-data[p].y);
+	}
+    }
+  v2[0] /= neighbours(p); // On divise par le nb d'agents dans le rayon de perception
+  v2[1] /= neighbours(p);
+
+  return v2;
 }
 
-void Boids::v3(Agent a)
+double * Boids::v3(Agent a)
 {
   
 }
