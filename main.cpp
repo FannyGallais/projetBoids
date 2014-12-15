@@ -1,13 +1,20 @@
 #include <stdio.h>
 #include "bwindow.h"
 #include "Agent.h"
+#include "Boids.h"
 
 
 int main()
 {
 
   Agent a1;
-  printf("%f %f\n",a1.x,a1.y);
+  Agent a2;
+  printf("%f %f %f %f\n",a1.x,a2.x,a1.y,a2.y);
+  Boids b;
+  b.addAgent(a1);
+  b.addAgent(a2);
+  printf("%d\n",b.neighbours(0));
+  
   /*bwindow win(640,480);
     printf("%d\n",win.init());
     win.map();

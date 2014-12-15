@@ -6,8 +6,8 @@
 
 
 
-#ifndef __AGENT_H__
-#define __AGENT_H__
+#ifndef __BOIDS_H__
+#define __BOIDS_H__
 
 
 // ===========================================================================
@@ -15,6 +15,7 @@
 // ===========================================================================
 #include <cstdio>
 #include <cstdlib>
+#include "Agent.h"
 
 
 
@@ -34,20 +35,23 @@
 
 
 
-class Agent
+class Boids
 {
   public :
-
+    
+    // =======================================================================
+    //                                 Enums
+    // =======================================================================
     
     // =======================================================================
     //                               Constructors
     // =======================================================================
-    Agent(void);
+    Boids(void);
 
     // =======================================================================
     //                                Destructor
     // =======================================================================
-    virtual ~Agent(void);
+    ~Boids(void);
 
     // =======================================================================
     //                            Accessors: getters
@@ -64,16 +68,20 @@ class Agent
     // =======================================================================
     //                              Public Methods
     // =======================================================================
-
+    void addAgent(Agent a);
+    void v1(Agent a);
+    void v2(Agent a);
+    void v3(Agent a);
+    void v(Agent a);
+    bool proximity(Agent a1, Agent a2);
+    int neighbours(int p);
     // =======================================================================
     //                             Public Attributes
     // =======================================================================
+    Agent * data;
+    int nb_Agents;
 
-    double x;
-    double y;
-    double vx;
-    double vy;
-    static const double R;
+
 
 
   protected :
@@ -81,12 +89,12 @@ class Agent
     // =======================================================================
     //                            Forbidden Constructors
     // =======================================================================
-    /*Agent(void)
+    /*Boids(void)
     {
       printf("%s:%d: error: call to forbidden constructor.\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
     };
-    Agent(const Agent &model)
+    Boids(const Boids &model)
     {
       printf("%s:%d: error: call to forbidden constructor.\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
@@ -120,5 +128,5 @@ class Agent
 // ===========================================================================
 
 
-#endif // __AGENT_H__
+#endif // __BOIDS_H__
 
