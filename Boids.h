@@ -15,8 +15,8 @@
 // ===========================================================================
 #include <cstdio>
 #include <cstdlib>
+#include <typeinfo>
 #include "Agent.h"
-
 
 
 // ===========================================================================
@@ -73,8 +73,9 @@ class Boids
     double * v2(int p);
     double * v3(Agent a);
     void v(Agent a);
-    bool proximity(Agent a1, Agent a2);
-    int neighbours(int p);
+    bool proximity(Agent a1, Agent a2, double d); // La distance entre a1 et a2 est elle inférieure à d ?
+    int * neighbours(int p,double d); // Retourne le nombre d'agents et d'obstacles dans le rayon d de l'agent a la position p
+
     // =======================================================================
     //                             Public Attributes
     // =======================================================================

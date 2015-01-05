@@ -43,6 +43,7 @@ class Agent
     //                               Constructors
     // =======================================================================
     Agent(void);
+	Agent(bool b);
 
     // =======================================================================
     //                                Destructor
@@ -73,7 +74,9 @@ class Agent
     double y;
     double vx;
     double vy;
+    bool isObstacle;
     static const double R;
+    static const double C;
 
 
   protected :

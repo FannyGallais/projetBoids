@@ -31,6 +31,7 @@
 //                         Definition of static attributes
 // ===========================================================================
 const double Agent::R = 270;
+const double Agent::C = 200;
 // ===========================================================================
 //                                  Constructors
 // ===========================================================================
@@ -40,6 +41,16 @@ Agent::Agent(void)
   y=(rand()/(double)RAND_MAX)*640;
   vx=0;
   vy=0;
+  isObstacle=false;
+}
+
+Agent::Agent(bool b)
+{
+  x=(rand()/(double)RAND_MAX)*480;
+  y=(rand()/(double)RAND_MAX)*640;
+  vx=0;
+  vy=0;
+  isObstacle=b;
 }
 
 // ===========================================================================

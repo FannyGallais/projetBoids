@@ -2,6 +2,7 @@
 #include "bwindow.h"
 #include "Agent.h"
 #include "Boids.h"
+#include <typeinfo>
 
 
 int main()
@@ -13,15 +14,23 @@ int main()
   Boids b;
   b.addAgent(a1);
   b.addAgent(a2);
-  printf("%d\n",b.neighbours(0));
   double * v1 = b.v1(0);
   printf("v1x : %f    v1y : %f\n",v1[0],v1[1]); // ça fait 0 c'est normal car on a initialisé les vx et vy à 0
   
   double * v2 = b.v2(0);
   printf("v2x : %f    v2y : %f\n",v2[0],v2[1]);
+  
+  Agent o = Agent(true);
+  b.addAgent(o);
+  printf("%f %f %f %f\n",o.x,o.y,o.vx,o.vy);
+  
+  int * tab = b.neighbours(0,Agent::R);
+  
+  printf("%d\n",tab[0]);
 
   delete [] v1;
   delete [] v2;
+  delete [] tab;
   
   /*bwindow win(640,480);
     printf("%d\n",win.init());
