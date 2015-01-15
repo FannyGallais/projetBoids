@@ -47,6 +47,7 @@ class Boids
     //                               Constructors
     // =======================================================================
     Boids(void);
+    Boids(int size);
 
     // =======================================================================
     //                                Destructor
@@ -72,8 +73,10 @@ class Boids
     double * velocity1(int p);
     double * velocity2(int p);
     double * velocity3(int p);
-    void velocity(double gamma1 , double gamma2 , double gamma3, double dt);
-    void position(double gamma1 , double gamma2 , double gamma3, double dt);
+    double * velocity4(int p);
+    void velocity(double gamma1 , double gamma2 , double gamma3, double gamma4, double dt);
+    void position(double gamma1 , double gamma2 , double gamma3, double gamma4, double dt);
+    int reperageProie(int p);
     bool proximity(Agent a1, Agent a2, double d); // La distance entre a1 et a2 est elle inférieure à d ?
     int * neighbours(int p,double d); // Retourne le nombre d'agents et d'obstacles dans le rayon d de l'agent a la position p
 

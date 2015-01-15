@@ -2,6 +2,7 @@
 #include "bwindow.h"
 #include "Agent.h"
 #include "Boids.h"
+#include "Predateur.h"
 #include <typeinfo>
 
 
@@ -19,6 +20,10 @@ int main()
   Agent a7;
   Agent o2 = Agent(true);
   Agent a8;
+  Agent a9;
+  Agent a10;
+  Agent a11;
+  Predateur p1;
   b.addAgent(a1);
   b.addAgent(a2); // Attention lorsqu'on modifie l'agent mis dans le tableau ça ne modifie pas l'agent d'origine
   b.addAgent(o);
@@ -29,6 +34,10 @@ int main()
   b.addAgent(a7);
   b.addAgent(o2);
   b.addAgent(a8);
+  b.addAgent(a9);
+  b.addAgent(a10);
+  b.addAgent(a11);
+  b.addAgent(p1);
   /*printf("position de a1 : x= %f y= %f\n",a1.x,a1.y);
   printf("position de a2 : x= %f y= %f\n",b.data[1].x,b.data[1].y);
   printf("position de o : x= %f y= %f\n",b.data[2].x,b.data[2].y);
@@ -63,9 +72,9 @@ int main()
 
   
   
+  //print("%c\n",b.data[13]);
   
-  
-  bwindow win(1200,1500);
+  bwindow win(1500,1500);
     printf("%d\n",win.init());
     win.map();
     for(;;)
@@ -86,21 +95,25 @@ int main()
 	}
 	
 	int i;
-	win.draw_fsquare(0,0,1200,1500,0xFEFEFE);
+	win.draw_fsquare(0,0,1500,1500,0xFEFEFE);
 	for(i=0;i<b.nb_Agents;i++)
 		{
-		  if(!b.data[i].isObstacle)
+		  if(b.data[i].isObstacle)
 		    {
-			  win.draw_fsquare(b.data[i].x-5,b.data[i].y-5,b.data[i].x+5,b.data[i].y+5,0xEF009F);
+			  win.draw_fsquare(b.data[i].x-4,b.data[i].y-4,b.data[i].x+4,b.data[i].y+4,0x000000);
+			  
 		    } 
-		   else 
+		   else if(b.data[i].isPredateur)
 			{
-		      win.draw_fsquare(b.data[i].x-5,b.data[i].y-5,b.data[i].x+5,b.data[i].y+5,0x000000);
+		      win.draw_fsquare(b.data[i].x-2,b.data[i].y-2,b.data[i].x+2,b.data[i].y+2,0x03DBCC); 
 			}
-			
+			else 
+			{
+				win.draw_fsquare(b.data[i].x-2,b.data[i].y-2,b.data[i].x+2,b.data[i].y+2,0xEF009F);
+			}
 		}
-    usleep(10000);
-	b.position(0.1,0.1,0.1,0.05);
+    usleep(20000);
+	b.position(0.1,0.1,1.2,5,0.08);
 	
 	}
 

@@ -44,6 +44,9 @@ class Agent
     // =======================================================================
     Agent(void);
 	Agent(bool b);
+	void deplacementAleatoire(void);
+	void Chasse(double xp, double yp);
+	void Digestion(void);
 
     // =======================================================================
     //                                Destructor
@@ -75,6 +78,7 @@ class Agent
     double vx;
     double vy;
     bool isObstacle;
+    bool isPredateur;
     static const double R;
     static const double C;
 
