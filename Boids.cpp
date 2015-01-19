@@ -38,7 +38,18 @@
 Boids::Boids(void)
 {
   nb_Agents = 0;
-  data = new Agent[50];
+  data = new Agent[100];
+  dataP = new Predateur[10];
+  int i;
+  nb_Agents=50;
+  for(i=0;i<50;i++)
+  {
+	  Agent a;
+	  data[i]=a;
+  }
+  Predateur p;
+  dataP[0]=p;
+  
 }
 
 Boids::Boids(int size)
@@ -82,7 +93,7 @@ int * Boids::neighbours(int p,double d)
     {
       if(proximity(data[p],data[i],d))
        {
-		 if(!data[i].isObstacle && !data[i].isPredateur)
+		 if(!data[i].isObstacle)
 			{	  
 				a++; 
 			}
@@ -165,24 +176,15 @@ double * Boids::velocity3(int p)
 double * Boids::velocity4(int p)
 {
   int i=0;
-  double xp=0,yp=0; // Coordonnées du prédateurs
+  double xp=dataP[0].x,yp=dataP[0].y; // Coordonnées du prédateurs
   double * v4 = new double[2];
   v4[0]=0;
   v4[1]=0;
-
-  for(i=0;i<nb_Agents;i++)
-  {
-	  if(data[i].isPredateur && p!=i)
+	if(sqrt((data[p].x-xp)*(data[p].x-xp)+(data[p].y-yp)*(data[p].y-yp))<Agent::R)
 	  {
-		xp = data[i].x;
-		yp = data[i].y;
-		if(sqrt((data[p].x-xp)*(data[p].x-xp)+(data[p].y-yp)*(data[p].y-yp))<Agent::R)
-		{
-		  v4[0]= -(xp-data[p].x)/(sqrt((xp-data[p].x)*(xp-data[p].x) + (yp-data[p].y)*(yp-data[p].y)));
-	      v4[1]= -(yp-data[p].y)/(sqrt((xp-data[p].x)*(xp-data[p].x) + (yp-data[p].y)*(yp-data[p].y)));
-	    }
-	  }	
-  }
+		v4[0]= -(xp-data[p].x)/(sqrt((xp-data[p].x)*(xp-data[p].x) + (yp-data[p].y)*(yp-data[p].y)));
+	    v4[1]= -(yp-data[p].y)/(sqrt((xp-data[p].x)*(xp-data[p].x) + (yp-data[p].y)*(yp-data[p].y)));
+	  }
   return v4;
 }
 
@@ -207,69 +209,127 @@ void Boids::velocity(double gamma1, double gamma2, double gamma3, double gamma4,
             
             if(data[i].y<50)
             {
-             //data[i].vx += dt*(gamma1*v1[0] + gamma2*v2[0] + gamma3*v3[0] + gamma4*v4[0]);
              data[i].vy = data[i].vy + k ;
             }
             else if(data[i].x>1200)
             {
              data[i].vx = -data[i].vx - k;
-             //data[i].vy += dt*(gamma1*v1[1] + gamma2*v2[1] + gamma3*v3[1] + gamma4*v4[1]);
             }
             else if(data[i].y>900)
             {
-             //data[i].vx +=dt*(gamma1*v1[0] + gamma2*v2[0] + gamma3*v3[0] + gamma4*v4[0]);
              data[i].vy = -data[i].vy - k ;
             }
             else if(data[i].x<50)
             {
              data[i].vx = data[i].vx + k;
-             //data[i].vy += dt*(gamma1*v1[1] + gamma2*v2[1] + gamma3*v3[1] + gamma4*v4[1]) ;
             }
             else
             {
             
             data[i].vx += dt*(gamma1*v1[0] + gamma2*v2[0] + gamma3*v3[0]+ gamma4*v4[0]);
             data[i].vy += dt*(gamma1*v1[1] + gamma2*v2[1] + gamma3*v3[1]+ gamma4*v4[1]);   //attention problème on calcule les velocity1 2 et 3 à partir des vx et vy précédents
-        }
-        /*
-            //a mattre à la toute fin des calculs de vitesses
-            int j=0;
-            while(sqrt((data[i].vx*data[i].vx)+(data[i].vy*data[i].vy)>1))
-            {
-              data[i].vx -= 10;
-              data[i].vy -= 10;
-              j++;
-            }
-            * */
+			}
+ 
+		}  
+	}
+	
+  int k2 = 5;
+	for(i=0; i<1 ; i++)
+  {
             
-      }  
-  }
+            if(dataP[i].y<50)
+            {
+             dataP[i].vy = dataP[i].vy + k2 ;
+            }
+            else if(dataP[i].x>1200)
+            {
+             dataP[i].vx = -dataP[i].vx - k2;
+            }
+            else if(dataP[i].y>900)
+            {
+             dataP[i].vy = -dataP[i].vy - k2 ;
+            }
+            else if(dataP[i].x<50)
+            {
+             dataP[i].vx = dataP[i].vx + k2;
+            }
+            else
+            {
+				reperageProie(0);
+				if(dataP[i].enChasse)
+				{
+				  dataP[i].Chasse(data[dataP[i].iProie].x,data[dataP[i].iProie].y);		
+				}
+				else if(dataP[i].enDigestion && dataP[i].attente<500)
+				{
+				  dataP[i].Digestion();
+				}
+				else if(dataP[i].enDigestion && dataP[i].attente>=500)
+				{
+				  dataP[i].enDigestion=false;
+				  dataP[i].attente=0;
+				}
+				else 
+				{
+				  dataP[i].deplacementAleatoire();
+				}
+			}
+ 
+		  
+	}
 
 }
 
 
 // Reperage de la proie c a d recherche de l'agent le plus proche dans le rayon Rp du prédateur.
-int Boids::reperageProie(int p) // p position du prédateur dans le tableau
+void Boids::reperageProie(int p) // p position du prédateur dans le tableau
 {
 	int i;
-	int proie=nb_Agents; // indice de la proie dans le tableau, s'il n'ya pas de proie il faut que l'indice soit hors du tableau
+	dataP[0].iProie=nb_Agents; // indice de la proie dans le tableau, s'il n'ya pas de proie il faut que l'indice soit hors du tableau
 	double xproie=100,yproie=100;
-	double d1 = sqrt((data[p].x-xproie)*(data[p].x-xproie)+(data[p].y-yproie)*(data[p].y-yproie));
+	double d1 = sqrt((dataP[p].x-xproie)*(dataP[p].x-xproie)+(dataP[p].y-yproie)*(dataP[p].y-yproie));
 	for(i=0; i<nb_Agents;i++)
 	{
-	  if(!data[i].isObstacle && i!=p && proximity(data[i],data[p],Predateur::Rp))
+	  if(!data[i].isObstacle && proximity(data[i],dataP[p],Predateur::Rp))
 	  {
-		  double d2 = sqrt((data[i].x-data[p].x)*(data[i].x-data[p].x)+(data[i].y-data[p].y)*(data[i].y-data[p].y));
+		  double d2 = sqrt((data[i].x-dataP[p].x)*(data[i].x-dataP[p].x)+(data[i].y-dataP[p].y)*(data[i].y-dataP[p].y));
 		  if(d2<d1)
 		  {
 			  d1 = d2;
 			  xproie = data[i].x;
 			  yproie = data[i].y;
-			  proie = i;
+			  dataP[0].iProie = i;
 		  }
 	  }
 	}
-  return proie;	
+  		
+  if(dataP[p].iProie<nb_Agents && !dataP[0].enDigestion)
+  {
+	  if(d1>Predateur::Reat)
+		{
+			dataP[0].enChasse=true;
+		}
+	  else if(d1<=Predateur::Reat)
+	  {
+		  mangerProie();
+	  }
+  }
+  else
+  {
+	  dataP[0].enChasse=false;
+  }
+}
+
+void Boids::mangerProie() // indice de la proie à manger dans data
+{
+	int j;
+	for(j=dataP[0].iProie;j<nb_Agents-1;j++)
+	{
+		data[j]=data[j+1];
+	}
+	data[nb_Agents-1]=NULL;
+	nb_Agents--;
+	dataP[0].enDigestion=true;
 }
 
 
@@ -285,19 +345,10 @@ void Boids::position(double gamma1 , double gamma2 , double gamma3, double gamma
 			  data[i].x += dt*data[i].vx;
 			  data[i].y += dt*data[i].vy;
 		  }
-		/*else if(data[i].isPredateur)
-		{
-			data[i].deplacementAleatoire();
-			/*int p = reperageProie(i);
-			if(p>=nb_Agents)
-			{
-				data[i].deplacementAleatoire();
-			} else {
-				data[i].Chasse(data[p].x,data[p].y);
-			}
-		}*/
-		  
 	}
+	dataP[0].x += dataP[0].vx;
+	dataP[0].y += dataP[0].vy;
+
 }
 
 // ===========================================================================

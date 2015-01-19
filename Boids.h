@@ -17,6 +17,7 @@
 #include <cstdlib>
 #include <typeinfo>
 #include "Agent.h"
+#include "Predateur.h"
 
 
 // ===========================================================================
@@ -76,16 +77,17 @@ class Boids
     double * velocity4(int p);
     void velocity(double gamma1 , double gamma2 , double gamma3, double gamma4, double dt);
     void position(double gamma1 , double gamma2 , double gamma3, double gamma4, double dt);
-    int reperageProie(int p);
+    void reperageProie(int p);
+    void mangerProie();
     bool proximity(Agent a1, Agent a2, double d); // La distance entre a1 et a2 est elle inférieure à d ?
     int * neighbours(int p,double d); // Retourne le nombre d'agents et d'obstacles dans le rayon d de l'agent a la position p
-
+	
     // =======================================================================
     //                             Public Attributes
     // =======================================================================
     Agent * data;
     int nb_Agents;
-
+	Predateur * dataP;
 
 
 

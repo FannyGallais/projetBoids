@@ -6,8 +6,8 @@
 
 
 
-#ifndef __AGENT_H__
-#define __AGENT_H__
+#ifndef __PREDATEUR_H__
+#define __PREDATEUR_H__
 
 
 // ===========================================================================
@@ -15,7 +15,7 @@
 // ===========================================================================
 #include <cstdio>
 #include <cstdlib>
-
+#include "Agent.h"
 
 
 // ===========================================================================
@@ -34,7 +34,7 @@
 
 
 
-class Agent
+class Predateur : public Agent
 {
   public :
 
@@ -42,14 +42,13 @@ class Agent
     // =======================================================================
     //                               Constructors
     // =======================================================================
-    Agent(void);
-	Agent(bool b);
+    Predateur(void);
 
 
     // =======================================================================
     //                                Destructor
     // =======================================================================
-    virtual ~Agent(void);
+    ~Predateur(void);
 
     // =======================================================================
     //                            Accessors: getters
@@ -66,31 +65,30 @@ class Agent
     // =======================================================================
     //                              Public Methods
     // =======================================================================
-
+	void deplacementAleatoire(void);
+	void Chasse(double xp, double yp);
+	void Digestion(void);
     // =======================================================================
     //                             Public Attributes
     // =======================================================================
-
-    double x;
-    double y;
-    double vx;
-    double vy;
-    bool isObstacle;
-    static const double R;
-    static const double C;
-
+    static const double Rp;
+	static const double Reat;
+	bool enChasse;
+	int iProie;
+	bool enDigestion;
+	int attente;
 
   protected :
 
     // =======================================================================
     //                            Forbidden Constructors
     // =======================================================================
-    /*Agent(void)
+    /*Predateur(void)
     {
       printf("%s:%d: error: call to forbidden constructor.\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
     };
-    Agent(const Agent &model)
+    Predateur(const Predateur &model)
     {
       printf("%s:%d: error: call to forbidden constructor.\n", __FILE__, __LINE__);
       exit(EXIT_FAILURE);
@@ -124,5 +122,5 @@ class Agent
 // ===========================================================================
 
 
-#endif // __AGENT_H__
+#endif // __PREDATEUR_H__
 

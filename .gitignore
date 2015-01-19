@@ -3,3 +3,4 @@ bwindow.o
 main.o
 test.out
 Boids.o
+Predateur.o

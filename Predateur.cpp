@@ -16,54 +16,76 @@
 // ===========================================================================
 //                                 Project Files
 // ===========================================================================
-#include "Agent.h"
+#include "Predateur.h"
 #include <math.h>
+
 
 
 
 //############################################################################
 //                                                                           #
-//                           Class Agent                                     #
+//                           Class Predateur                                 #
 //                                                                           #
 //############################################################################
 
 // ===========================================================================
 //                         Definition of static attributes
 // ===========================================================================
-const double Agent::R = 70;
-const double Agent::C = 30;
+const double Predateur::Rp = 70;
+const double Predateur::Reat = 10;
 // ===========================================================================
 //                                  Constructors
 // ===========================================================================
-Agent::Agent(void)
+Predateur::Predateur(void) : Agent()
 {
-  x=(rand()/(double)RAND_MAX)*(640+100)+100;
-  y=(rand()/(double)RAND_MAX)*(480+100)+100;
-  vx=10;
-  vy=-10;
-  isObstacle=false;
+ enChasse = false;
+ enDigestion = false;
+ attente = 0;
 }
 
-Agent::Agent(bool b)
-{
-  x=(rand()/(double)RAND_MAX)*(640+100)+100;
-  y=(rand()/(double)RAND_MAX)*(480+100)+100;
-  vx=0;
-  vy=0;
-  isObstacle=b;
-}
+
 
 // ===========================================================================
 //                                  Destructor
 // ===========================================================================
-Agent::~Agent(void)
+Predateur::~Predateur(void)
 {
+  
 }
+
+
 
 // ===========================================================================
 //                                 Public Methods
 // ===========================================================================
+void Predateur::deplacementAleatoire(void)
+{
+	vx+=(rand()/(double)RAND_MAX)*2-1;
+	vy+=(rand()/(double)RAND_MAX)*2-1;
+	double norm = sqrt(vx*vx+vy*vy);
+	double vmax = 2;
+	if(norm>vmax)
+	{
+		vx = vx/(norm/vmax);
+		vy = vy/(norm/vmax);
+	}
 
+
+}
+
+void Predateur::Chasse(double xp, double yp) // (xp,yp) les coordonnées de la proie
+{
+	vx = (xp-x)/(sqrt((xp-x)*(xp-x)+(yp-y)*(yp-y)));
+	vy = (yp-y)/(sqrt((xp-x)*(xp-x)+(yp-y)*(yp-y)));
+}
+
+void Predateur::Digestion()
+{
+	vx=0;
+	vy=0;
+	attente ++;
+	printf("Je suis en digestion, attente vaut : %d\n",attente);
+}
 // ===========================================================================
 //                                Protected Methods
 // ===========================================================================
